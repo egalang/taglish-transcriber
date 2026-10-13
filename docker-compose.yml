@@ -1,0 +1,25 @@
+services:
+  taglish:
+    build: .
+    image: taglish-transcriber
+    container_name: taglish-transcriber
+    ports:
+      - "7860:7860"
+    env_file:
+      - .env
+    environment:
+      # Override any of these in .env; these are the container defaults.
+      WHISPER_MODEL: ${WHISPER_MODEL:-large-v3}
+      WHISPER_DEVICE: ${WHISPER_DEVICE:-cpu}
+      WHISPER_COMPUTE_TYPE: ${WHISPER_COMPUTE_TYPE:-int8}
+      OPENCODE_BASE_URL: ${OPENCODE_BASE_URL:-https://opencode.ai/zen/go/v1}
+      OPENCODE_MODEL: ${OPENCODE_MODEL:-deepseek-v4.1-flash}
+    volumes:
+      # Cache downloaded Whisper weights so restarts don't re-download ~3 GB.
+      - whisper-models:/models
+      # Persist transcripts/cleaned text on the host.
+      - ./outputs:/app/outputs
+    restart: unless-stopped
+
+volumes:
+  whisper-models:

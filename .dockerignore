@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+outputs/
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.gitignore
+README.md
+*.md
